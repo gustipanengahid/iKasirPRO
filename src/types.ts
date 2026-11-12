@@ -1,0 +1,111 @@
+export interface ProductVariant {
+  id: string;
+  productId: string;
+  sku?: string;
+  attributes: Record<string, string>; // Contoh: { "Ukuran": "L", "Warna": "Hitam" }
+  price: number;
+  costPrice: number;
+  stock: number;
+  minStock: number;
+}
+
+export interface Product {
+  id: string;
+  sku: string;
+  name: string;
+  category: string;
+  price: number;
+  costPrice: number; // Untuk kalkulasi laba/rugi
+  stock: number;
+  minStock: number; // Batas minimum sebelum peringatan stok menipis
+  imageUrl?: string;
+  hasVariants?: boolean;
+  variants?: ProductVariant[];
+}
+
+export interface TransactionItem {
+  productId: string;
+  variantId?: string; // Menyimpan ID varian jika produk memiliki varian
+  sku: string;
+  name: string;
+  variantName?: string; // Format tampilan varian, misal: "(Ukuran: L, Warna: Hitam)"
+  price: number;
+  costPrice: number;
+  qty: number;
+  discount: number; // Diskon nominal per item
+  total: number;
+}
+
+export interface Transaction {
+  id: string;
+  invoiceNumber: string;
+  date: string; // ISO String
+  items: TransactionItem[];
+  subTotal: number;
+  discountTotal: number;
+  taxTotal: number;
+  total: number;
+  paymentMethod: "cash" | "qris" | "gopay" | "ovo" | "dana" | "shopeepay";
+  cashAmount?: number;
+  changeAmount?: number;
+  cashierId: string;
+  cashierName: string;
+}
+
+export type UserRole = "owner" | "admin" | "cashier";
+
+export interface User {
+  id: string;
+  authId?: string; // Kompatibilitas dengan pemanggilan di App.tsx
+  auth_id?: string; // Merujuk ke ID Supabase Auth database
+  username: string;
+  password?: string;
+  name: string;
+  role: UserRole;
+  active: boolean;
+  avatarUrl?: string; // Tambahan properti foto profil avatar
+  createdAt?: string;
+}
+
+export interface SyncConfig {
+  googleSheetsUrl: string;
+  isEnabled: boolean;
+  lastSyncedAt?: string;
+}
+
+export interface StoreSettings {
+  id?: number | string;
+  name: string;
+  address: string;
+  phone: string;
+  isTaxEnabled?: boolean;
+  taxPercentage?: number;
+  is_tax_enabled?: boolean;
+  tax_percentage?: number;
+  storeLogo?: string;
+  store_logo?: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+}
+
+export type ActiveTab =
+  | "dashboard"
+  | "kasir"
+  | "riwayat"
+  | "stok"
+  | "kategori"
+  | "user"
+  | "pengaturan";
+
+// Data awal default untuk pengguna (akun sistem)
+export const INITIAL_USERS: User[] = [];
+
+// Kategori awal bawaan tanpa properti icon sama sekali
+export const INITIAL_CATEGORIES: Category[] = [];
+
+export const INITIAL_PRODUCTS: Product[] = [];
+
+export const INITIAL_TRANSACTIONS: Transaction[] = [];
